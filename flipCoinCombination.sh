@@ -7,7 +7,12 @@ echo `awk -vH=$1 -vT=$2 'BEGIN{print( (H/( H + T ))*100 )}'`
 
 declare -A dices
 dices=( ["H"]=0 ["T"]=0 ["HH"]=0 ["TT"]=0 ["TH"]=0 ["TH"]=0 ["HHH"]=0 ["HHT"]=0 ["HTH"]=0 ["HTT"]=0 ["THH"]=0 ["THT"]=0 ["TTH"]=0 ["TTT"]=0 )
-echo "Welcome to usecase 4"
+
+declare -A singlets doublets triplets
+singlets=( ["H"]=0 ["T"]=0 )
+doublets=( ["HH"]=0 ["TT"]=0 ["TH"]=0 ["TH"]=0 )
+triplets=( ["HHH"]=0 ["HHT"]=0 ["HTH"]=0 ["HTT"]=0 ["THH"]=0 ["THT"]=0 ["TTH"]=0 ["TTT"]=0 )
+echo "Welcome to usecase 5"
 ishead=0
 counter=0
 isHH=0
@@ -101,45 +106,45 @@ do
 done
 
 
-head_per=$( percentage ${dices[H]} ${dices[T]} )
-tail_per=$( percentage ${dices[T]} ${dices[H]} )
+singlets["H"]=$( percentage ${dices[H]} ${dices[T]} )
+singlets["T"]=$( percentage ${dices[T]} ${dices[H]} )
 #echo ${dices[@]} ${!dices[@]}
 
 #echo "${dices[HT]}${dices[TT]}${dices[TH]}${dices[HH]}"
 
 
-HH_per=$( percentage ${dices[HH]} $(( ${dices[TH]}+${dices[TT]}+${dices[HT]} )) )
-HT_per=$( percentage ${dices[HT]} $(( ${dices[TH]}+${dices[TT]}+${dices[HH]} )) )
-TH_per=$( percentage ${dices[TH]} $(( ${dices[HH]}+${dices[TT]}+${dices[HT]} )) )
-TT_per=$( percentage ${dices[TT]} $(( ${dices[TH]}+${dices[HH]}+${dices[HT]} )) )
+doublets[HH]=$( percentage ${dices[HH]} $(( ${dices[TH]}+${dices[TT]}+${dices[HT]} )) )
+doublets[HT]=$( percentage ${dices[HT]} $(( ${dices[TH]}+${dices[TT]}+${dices[HH]} )) )
+doublets[TH]=$( percentage ${dices[TH]} $(( ${dices[HH]}+${dices[TT]}+${dices[HT]} )) )
+doublets[TT]=$( percentage ${dices[TT]} $(( ${dices[TH]}+${dices[HH]}+${dices[HT]} )) )
 
 
-HHH_per=$( percentage ${dices[HHH]} $(( ${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
-HHT_per=$( percentage ${dices[HHT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
-HTH_per=$( percentage ${dices[HTH]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
-HTT_per=$( percentage ${dices[HTT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
+triplets[HHH]=$( percentage ${dices[HHH]} $(( ${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
+triplets[HHT]=$( percentage ${dices[HHT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
+triplets[HTH]=$( percentage ${dices[HTH]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
+triplets[HTT]=$( percentage ${dices[HTT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
 
-THH_per=$( percentage ${dices[THH]} $(( ${dices[HHH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
-THT_per=$( percentage ${dices[THT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[TTH]} )) )
-TTH_per=$( percentage ${dices[TTH]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]} )) )
-TTT_per=$( percentage ${dices[TTT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[THT]}+${dices[TTH]} )) )
+triplets[THH]=$( percentage ${dices[THH]} $(( ${dices[HHH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]}+${dices[TTH]} )) )
+triplets[THT]=$( percentage ${dices[THT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[TTH]} )) )
+triplets[TTH]=$( percentage ${dices[TTH]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[TTT]}+${dices[THT]} )) )
+triplets[TTT]=$( percentage ${dices[TTT]} $(( ${dices[HHH]}+${dices[THH]}+${dices[HTT]}+${dices[HHT]}+${dices[HTH]}+${dices[THT]}+${dices[TTH]} )) )
 
 
 
 echo
 echo
 echo "Percentage of singlets"
-echo "The percentage of head falled is" $head_per
-echo "The percentage of tails falled is" $tail_per
+echo "The percentage of head falled is" ${singlets["H"]}
+echo "The percentage of tails falled is" ${singlets["T"]}
 
 echo
 echo
 echo "Percentage of doublets"
 echo "Head-H  Tail-T"
-echo "The percentage of HH falled is" $HH_per
-echo "The percentage of TT falled is" $TT_per
-echo "The percentage of HT falled is" $HT_per
-echo "The percentage of TH falled is" $TH_per
+echo "The percentage of HH falled is" ${doublets[HH]}
+echo "The percentage of TT falled is" ${doublets[TT]}
+echo "The percentage of HT falled is" ${doublets[HT]}
+echo "The percentage of TH falled is" ${doublets[TH]}
 
 
 
@@ -147,15 +152,87 @@ echo
 echo
 echo "Percentage of Triplets"
 echo "Head-H  Tail-T"
-echo "The percentage of HHH falled is" $HHH_per
-echo "The percentage of HTT falled is" $HTT_per
-echo "The percentage of HHT falled is" $HHT_per
-echo "The percentage of HTH falled is" $HTH_per
+echo "The percentage of HHH falled is" ${triplets[HHH]}
+echo "The percentage of HTT falled is" ${triplets[HTT]}
+echo "The percentage of HHT falled is" ${triplets[HHT]}
+echo "The percentage of HTH falled is" ${triplets[HTH]}
 
-echo "The percentage of THH falled is" $THH_per
-echo "The percentage of TTT falled is" $TTT_per
-echo "The percentage of THT falled is" $THT_per
-echo "The percentage of TTH falled is" $TTH_per
+echo "The percentage of THH falled is" ${triplets[THH]}
+echo "The percentage of TTT falled is" ${triplets[TTT]}
+echo "The percentage of THT falled is" ${triplets[THT]}
+echo "The percentage of TTH falled is" ${triplets[TTH]}
 
 
+
+keys=${!singlets[@]}
+values=${singlets[@]}
+#echo $values $keys
+
+flag=0
+
+for key in "${!singlets[@]}"
+do
+	if [ $flag -eq 0 ]
+	then
+
+		x="${singlets[$key]} $key\n"
+		flag=1
+
+	else
+		x="$x""${singlets[$key]} $key\n"
+
+	fi
+	#echo $key
+done
+echo
+echo "Sorting combinations for singlets"
+echo -e $x | sort -r
+printf "Winning combination for singlets is "
+echo -e $x | sort -r | head -1
+
+
+flag=0
+
+for key in "${!doublets[@]}"
+do
+	if [ $flag -eq 0 ]
+	then
+
+		x="${doublets[$key]} $key\n"
+		flag=1
+
+	else
+		x="$x""${doublets[$key]} $key\n"
+
+	fi
+	#echo $key
+done
+echo
+echo "Sorting combinations for doublets"
+echo -e $x | sort -r
+printf "Winning combination for doublets is "
+echo -e $x | sort -r | head -1
+
+
+flag=0
+
+for key in "${!triplets[@]}"
+do
+	if [ $flag -eq 0 ]
+	then
+
+		x="${triplets[$key]} $key\n"
+		flag=1
+
+	else
+		x="$x""${triplets[$key]} $key\n"
+
+	fi
+	#echo $key
+done
+echo
+echo "Sorting combinations for triplets"
+echo -e $x | sort -r
+printf "Winning combination for triplets is "
+echo -e $x | sort -r | head -1
 
